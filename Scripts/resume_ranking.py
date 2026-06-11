@@ -1,0 +1,109 @@
+"""
+resume_ranking.py — Similarity matching and score normalization.
+
+Provides improved TF-IDF (bigrams + sublinear TF), min-max score normalization,
+and human-readable match labels.
+"""
+
+import os
+import numpy as np
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+try:
+    from Scripts.text_processing import preprocess_text, load_nlp_model
+except ImportError:
+    from text_processing import preprocess_text, load_nlp_model
+
+
+# ---------------------------------------------------------------------------
+# Similarity calculation
+# ---------------------------------------------------------------------------
+def calculate_similarity(job_desc, resumes):
+    """Calculate cosine similarity between a job description and a list of resumes.
+
+    Uses bigram TF-IDF with sublinear term-frequency scaling for better
+    phrase-level matching compared to plain unigram TF-IDF.
+    """
+    vectorizer = TfidfVectorizer(ngram_range=(1, 2), sublinear_tf=True)
+    documents = [job_desc] + resumes
+    tfidf_matrix = vectorizer.fit_transform(documents)
+    similarity_scores = cosine_similarity(tfidf_matrix[0], tfidf_matrix[1:])[0]
+    return similarity_scores
+
+
+# ---------------------------------------------------------------------------
+# Score normalization
+# ---------------------------------------------------------------------------
+def normalize_scores(scores):
+    """Rescale raw cosine similarity scores to 0–100 via min-max normalization.
+
+    This makes scores relative to the current batch so that the best candidate
+    always scores near 100 and the weakest near 0, which is more intuitive
+    for HR professionals than raw cosine values.
+    """
+    scores = np.array(scores, dtype=float)
+    if len(scores) == 0:
+        return scores
+    min_score = scores.min()
+    max_score = scores.max()
+    if max_score == min_score:
+        # All resumes scored identically — assign neutral 50
+        return np.full_like(scores, 50.0)
+    normalized = ((scores - min_score) / (max_score - min_score)) * 100
+    return np.round(normalized, 2)
+
+
+def get_score_label(score):
+    """Return a human-readable match label for a normalized score."""
+    if score >= 80:
+        return "🟢 Excellent Match"
+    elif score >= 60:
+        return "🔵 Good Match"
+    elif score >= 40:
+        return "🟡 Average Match"
+    elif score >= 20:
+        return "🟠 Weak Match"
+    else:
+        return "🔴 Poor Match"
+
+
+# ---------------------------------------------------------------------------
+# File helper (used by CLI scripts only)
+# ---------------------------------------------------------------------------
+def load_text_file(filepath):
+    """Load a text file and return its content as a string."""
+    if os.path.exists(filepath):
+        with open(filepath, "r", encoding="utf-8") as file:
+            return file.read()
+    return ""
+
+
+# ---------------------------------------------------------------------------
+# CLI entry point
+# ---------------------------------------------------------------------------
+if __name__ == "__main__":
+    job_desc = preprocess_text(load_text_file("data/job_description.txt"))
+
+    resume_files = [
+        f for f in os.listdir("data")
+        if f.endswith(".txt") and "job_description" not in f
+    ]
+    resumes = [
+        preprocess_text(load_text_file(f"data/{fname}"))
+        for fname in resume_files
+    ]
+
+    raw_scores = calculate_similarity(job_desc, resumes)
+    normalized = normalize_scores(raw_scores)
+    labels = [get_score_label(s) for s in normalized]
+
+    ranked = sorted(
+        zip(resume_files, normalized, labels),
+        key=lambda x: x[1],
+        reverse=True,
+    )
+
+    df = pd.DataFrame(ranked, columns=["Resume", "Score (%)", "Match Level"])
+    print(df.to_string(index=False))

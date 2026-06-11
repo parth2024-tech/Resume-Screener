@@ -1,24 +1,52 @@
-/* Streamlit Custom Styling */
+/* ──────────────────────────────────────────────
+   Streamlit Custom Styling
+   Uses data-testid selectors for version resilience
+   ────────────────────────────────────────────── */
+
+/* App title */
 h1 {
     font-size: 36px;
     text-align: center;
     color: #FF4B4B;
 }
 
-.stTextArea, .stFileUploader {
+/* Text area */
+[data-testid="stTextArea"] textarea {
     border-radius: 10px;
     border: 2px solid #FF4B4B;
 }
 
-div.stButton button {
+/* File uploader */
+[data-testid="stFileUploader"] {
+    border-radius: 10px;
+    border: 2px solid #FF4B4B;
+    padding: 8px;
+}
+
+/* Primary button */
+[data-testid="stButton"] button {
     background-color: #FF4B4B;
     color: white;
     font-weight: bold;
     border-radius: 10px;
-    padding: 10px;
+    padding: 10px 24px;
+    transition: background-color 0.2s ease;
 }
 
-.stDataFrame {
+[data-testid="stButton"] button:hover {
+    background-color: #E03E3E;
+    color: white;
+}
+
+/* Dataframe container */
+[data-testid="stDataFrame"] {
     border-radius: 10px;
     border: 2px solid #FF4B4B;
+}
+
+/* Expander (text preview) */
+[data-testid="stExpander"] {
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 8px;
 }
