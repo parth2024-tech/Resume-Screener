@@ -52,8 +52,14 @@ def load_nlp_model():
 def preprocess_text(text):
     """Clean text via spaCy: lowercasing, lemmatization, stopword & punctuation removal."""
     nlp = load_nlp_model()
+    # 1. Lowercase inputs to ensure case-insensitivity
     doc = nlp(text.lower())
-    tokens = [token.lemma_ for token in doc if not token.is_stop and not token.is_punct]
+    # 2. Tokenize, lemmatize, and filter stopwords/punctuation
+    tokens = [
+        token.lemma_ 
+        for token in doc 
+        if not token.is_stop and not token.is_punct and token.text.strip()
+    ]
     return " ".join(tokens)
 
 
