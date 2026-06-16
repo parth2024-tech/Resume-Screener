@@ -23,8 +23,10 @@ By automating resume filtering, this tool saves hours of manual review and ensur
   - Supports scanned and digital resumes in formats: `.pdf`, `.docx`, `.txt`, `.jpg`, `.png`, `.jpeg`
 
 - 🧠 **AI-Based Resume Matching**
-  - Uses **TF-IDF** and **Cosine Similarity** to evaluate matching scores
-  - Intelligent filtering using **spaCy** NLP preprocessing
+  - Uses **TF-IDF (with unigram and bigram representation)** and **Cosine Similarity** to evaluate matching scores.
+  - Sublinear term-frequency scaling is applied to normalize high repetition keyword spamming.
+  - Intelligent filtering using **spaCy** NLP preprocessing (lowercasing, lemmatization, stopword filtering, and punctuation removal).
+  - Handles scanned documents seamlessly with an integrated Tesseract OCR fallback mechanism.
 
 - 📊 **Candidate Ranking Dashboard**
   - Real-time ranking display with interactive Streamlit UI
