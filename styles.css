@@ -1,6 +1,10 @@
 /* ──────────────────────────────────────────────
    Streamlit Custom Styling
-   Uses data-testid selectors for version resilience
+   Uses data-testid selectors for version resilience.
+   
+   These stable target selectors prevent CSS styling breakages 
+   across Streamlit upgrades, as default elements classes are dynamically 
+   generated and changed by Streamlit's compiler.
    ────────────────────────────────────────────── */
 
 /* App title */
