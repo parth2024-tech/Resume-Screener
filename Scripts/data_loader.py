@@ -8,10 +8,16 @@ import os
 
 
 def load_text_file(filepath):
-    """Load a text file and return its content as a string."""
+    """Load a text file and return its content as a string.
+    
+    Includes exception handling for file read or decoding issues.
+    """
     if os.path.exists(filepath):
-        with open(filepath, "r", encoding="utf-8") as file:
-            return file.read()
+        try:
+            with open(filepath, "r", encoding="utf-8") as file:
+                return file.read()
+        except Exception as e:
+            print(f"❌ Error reading file at {filepath}: {e}")
     return ""
 
 
