@@ -145,6 +145,14 @@ if job_desc_raw and resume_files:
 
         for idx, resume_file in enumerate(resume_files):
             try:
+                # Limit size to 10MB to prevent potential memory issues
+                if resume_file.size > 10 * 1024 * 1024:
+                    failed_files.append(
+                        (resume_file.name, "File size exceeds 10MB limit")
+                    )
+                    progress_bar.progress((idx + 1) / len(resume_files))
+                    continue
+
                 resume_text = cached_extract_text(
                     resume_file.getvalue(), resume_file.name
                 )
