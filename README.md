@@ -77,3 +77,15 @@ sudo apt install tesseract-ocr
 
 # Run the app
 streamlit run app.py
+
+### 🧪 Running Unit Tests
+To run the automated test suite for scoring and matching logic:
+```bash
+python -m unittest tests/test_nlp_logic.py
+```
+
+### 🧹 Cache Cleanup
+To clean up compiled Python cache files (`.pyc`) and `__pycache__` directories:
+```bash
+python scripts/clean_pycache.py
+```
