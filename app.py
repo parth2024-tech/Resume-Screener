@@ -57,7 +57,7 @@ init_nlp()
 # ──────────────────────────────────────────────
 # Load external CSS
 # ──────────────────────────────────────────────
-def load_css(file_name):
+def load_css(file_name: str) -> None:
     css_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), file_name)
     if os.path.exists(css_path):
         with open(css_path) as f:
