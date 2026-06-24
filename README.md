@@ -77,6 +77,13 @@ sudo apt install tesseract-ocr
 
 # Run the app
 streamlit run app.py
+```
+
+### 🖥️ Running via CLI
+You can also run the resume screening via the command line without the UI. Use the `--jd` and `--resume-dir` flags to customize the input paths:
+```bash
+python Scripts/resume_ranking.py --jd "data/job_description.txt" --resume-dir "data"
+```
 
 ### 🧪 Running Unit Tests
 To run the automated test suite for scoring and matching logic:
