@@ -8,6 +8,8 @@ Both app.py and CLI scripts import from this module.
 import shutil
 import subprocess
 import spacy
+import logging
+from typing import Any
 import pdfplumber
 import pytesseract
 from PIL import Image
@@ -28,7 +30,7 @@ if _tesseract_path:
 _nlp = None
 
 
-def load_nlp_model():
+def load_nlp_model() -> Any:
     """Load spaCy model with parser and NER disabled for speed.
 
     Returns the cached model on subsequent calls.
@@ -49,7 +51,7 @@ def load_nlp_model():
 # ---------------------------------------------------------------------------
 # Text preprocessing
 # ---------------------------------------------------------------------------
-def preprocess_text(text):
+def preprocess_text(text: str) -> str:
     """Clean text via spaCy: lowercasing, lemmatization, stopword & punctuation removal."""
     nlp = load_nlp_model()
     # 1. Lowercase inputs to ensure case-insensitivity
@@ -66,7 +68,7 @@ def preprocess_text(text):
 # ---------------------------------------------------------------------------
 # Text extraction — one function per format, each wrapped in try/except
 # ---------------------------------------------------------------------------
-def extract_text_from_pdf(pdf_file):
+def extract_text_from_pdf(pdf_file: Any) -> str:
     """Extract text from a PDF file, falling back to OCR for scanned pages.
 
     Returns an empty string (never crashes) if extraction fails.
@@ -84,11 +86,12 @@ def extract_text_from_pdf(pdf_file):
                         page.to_image(resolution=300).original
                     ) + "\n"
         return text.strip()
-    except Exception:
+    except Exception as e:
+        logging.error(f"Error extracting text from PDF: {e}")
         return ""
 
 
-def extract_text_from_image(image_file):
+def extract_text_from_image(image_file: Any) -> str:
     """Extract text from an image (JPG/PNG/JPEG) via OCR.
 
     Returns an empty string if extraction fails.
@@ -97,11 +100,12 @@ def extract_text_from_image(image_file):
         return pytesseract.image_to_string(
             Image.open(image_file).convert("RGB")
         ).strip()
-    except Exception:
+    except Exception as e:
+        logging.error(f"Error extracting text from image: {e}")
         return ""
 
 
-def extract_text_from_docx(docx_file):
+def extract_text_from_docx(docx_file: Any) -> str:
     """Extract text from a Word document (.docx).
 
     Returns an empty string if extraction fails.
@@ -110,5 +114,6 @@ def extract_text_from_docx(docx_file):
         return "\n".join(
             para.text for para in Document(docx_file).paragraphs
         ).strip()
-    except Exception:
+    except Exception as e:
+        logging.error(f"Error extracting text from docx: {e}")
         return ""
