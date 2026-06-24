@@ -15,8 +15,10 @@ Mathematical Background:
 """
 
 import os
+import argparse
 import numpy as np
 import pandas as pd
+from typing import List, Union
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -29,7 +31,7 @@ except ImportError:
 # ---------------------------------------------------------------------------
 # Similarity calculation
 # ---------------------------------------------------------------------------
-def calculate_similarity(job_desc, resumes):
+def calculate_similarity(job_desc: str, resumes: List[str]) -> np.ndarray:
     """Calculate cosine similarity between a job description and a list of resumes.
 
     Uses bigram TF-IDF with sublinear term-frequency scaling for better
@@ -45,7 +47,7 @@ def calculate_similarity(job_desc, resumes):
 # ---------------------------------------------------------------------------
 # Score normalization
 # ---------------------------------------------------------------------------
-def normalize_scores(scores):
+def normalize_scores(scores: Union[List[float], np.ndarray]) -> np.ndarray:
     """Convert raw cosine similarity scores directly to percentages (0-100).
     
     This replaces the batch-dependent min-max normalization to ensure that 
@@ -61,7 +63,7 @@ def normalize_scores(scores):
     return np.round(normalized, 2)
 
 
-def get_score_label(score):
+def get_score_label(score: float) -> str:
     """Return a human-readable match label for a normalized score."""
     if score >= 80:
         return "🟢 Excellent Match"
@@ -78,7 +80,7 @@ def get_score_label(score):
 # ---------------------------------------------------------------------------
 # File helper (used by CLI scripts only)
 # ---------------------------------------------------------------------------
-def load_text_file(filepath):
+def load_text_file(filepath: str) -> str:
     """Load a text file and return its content as a string."""
     if os.path.exists(filepath):
         with open(filepath, "r", encoding="utf-8") as file:
@@ -90,14 +92,19 @@ def load_text_file(filepath):
 # CLI entry point
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
-    job_desc = preprocess_text(load_text_file("data/job_description.txt"))
+    parser = argparse.ArgumentParser(description="Rank resumes against a job description.")
+    parser.add_argument("--jd", type=str, default="data/job_description.txt", help="Path to the job description text file.")
+    parser.add_argument("--resume-dir", type=str, default="data", help="Path to the directory containing resumes.")
+    args = parser.parse_args()
+
+    job_desc = preprocess_text(load_text_file(args.jd))
 
     resume_files = [
-        f for f in os.listdir("data")
-        if f.endswith(".txt") and "job_description" not in f
+        f for f in os.listdir(args.resume_dir)
+        if f.endswith(".txt") and os.path.join(args.resume_dir, f) != args.jd
     ]
     resumes = [
-        preprocess_text(load_text_file(f"data/{fname}"))
+        preprocess_text(load_text_file(os.path.join(args.resume_dir, fname)))
         for fname in resume_files
     ]
 
