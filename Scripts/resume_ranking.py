@@ -46,21 +46,18 @@ def calculate_similarity(job_desc, resumes):
 # Score normalization
 # ---------------------------------------------------------------------------
 def normalize_scores(scores):
-    """Rescale raw cosine similarity scores to 0–100 via min-max normalization.
-
-    This makes scores relative to the current batch so that the best candidate
-    always scores near 100 and the weakest near 0, which is more intuitive
-    for HR professionals than raw cosine values.
+    """Convert raw cosine similarity scores directly to percentages (0-100).
+    
+    This replaces the batch-dependent min-max normalization to ensure that 
+    a resume's score is absolute and does not change based on other resumes 
+    uploaded in the same batch.
     """
     scores = np.array(scores, dtype=float)
     if len(scores) == 0:
         return scores
-    min_score = scores.min()
-    max_score = scores.max()
-    if max_score == min_score:
-        # All resumes scored identically — assign neutral 50
-        return np.full_like(scores, 50.0)
-    normalized = ((scores - min_score) / (max_score - min_score)) * 100
+    
+    # Cosine similarity ranges from 0 to 1. We multiply by 100 to get a percentage.
+    normalized = np.clip(scores * 100, 0, 100)
     return np.round(normalized, 2)
 
 

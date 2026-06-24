@@ -4,16 +4,16 @@ from Scripts.resume_ranking import normalize_scores, get_score_label
 
 class TestNLPLogic(unittest.TestCase):
     def test_score_normalization_equal(self):
-        # All inputs have same scores, should map to neutral 50
+        # Scores should map directly to absolute percentages
         scores = [0.8, 0.8, 0.8]
         normalized = normalize_scores(scores)
-        np.testing.assert_array_almost_equal(normalized, [50.0, 50.0, 50.0])
+        np.testing.assert_array_almost_equal(normalized, [80.0, 80.0, 80.0])
 
     def test_score_normalization_range(self):
-        # Min score maps to 0, Max maps to 100
+        # Scores should map directly to absolute percentages
         scores = [0.1, 0.5, 0.9]
         normalized = normalize_scores(scores)
-        np.testing.assert_array_almost_equal(normalized, [0.0, 50.0, 100.0])
+        np.testing.assert_array_almost_equal(normalized, [10.0, 50.0, 90.0])
 
     def test_score_labels(self):
         self.assertEqual(get_score_label(90), "🟢 Excellent Match")
