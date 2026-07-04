@@ -1,8 +1,10 @@
 """
-resume_ranking.py — Similarity matching and score normalization.
+resume_ranking.py — TF-IDF similarity scoring and match labelling.
 
-Provides improved TF-IDF (bigrams + sublinear TF), min-max score normalization,
-and human-readable match labels.
+Provides bigram TF-IDF with sublinear-TF scaling and cosine similarity.
+The raw cosine score (0-1) is used externally by skills_extractor.combined_score()
+to produce the final candidate score, which blends TF-IDF (60%) with keyword
+match ratio (40%) for a richer, more explainable result.
 
 Mathematical Background:
 1. TF-IDF Representation:
@@ -10,7 +12,7 @@ Mathematical Background:
    This prevents high term repetition from dominating the feature weights.
    Bigrams are included to capture key phrase patterns (e.g., "data science").
 2. Cosine Similarity:
-   Similarity(A, B) = (A . B) / (||A|| * ||B||)
+   Similarity(A, B) = (A · B) / (||A|| × ||B||)
    This computes the cosine of the angle between the document TF-IDF vectors.
 """
 
