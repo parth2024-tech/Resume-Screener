@@ -159,6 +159,44 @@ html, body, [class*="css"] {
     border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
+.tag-section {
+    background: rgba(168, 85, 247, 0.1);
+    color: #d8b4fe;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.tag-jd {
+    background: rgba(14, 165, 233, 0.1);
+    color: #7dd3fc;
+    border: 1px solid rgba(14, 165, 233, 0.3);
+}
+
+/* ── Avatar circle ── */
+.avatar-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.25rem 0 0.5rem;
+}
+
+.avatar-initials {
+    font-size: 1.8rem;
+    font-weight: 800;
+    font-family: 'Inter', sans-serif;
+}
+
+/* ── Info badges ── */
+.badge {
+    padding: 0.3rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
 /* ── Streamlit component overrides ── */
 
 /* Text areas */
