@@ -1,56 +1,276 @@
 /* ──────────────────────────────────────────────
-   Streamlit Custom Styling
-   Uses data-testid selectors for version resilience.
-   
-   These stable target selectors prevent CSS styling breakages 
-   across Streamlit upgrades, as default elements classes are dynamically 
-   generated and changed by Streamlit's compiler.
+   AI Resume Screener — Premium Dark Theme
+   Google Font: Inter (loaded via @import)
+   Uses stable data-testid selectors for Streamlit version resilience.
    ────────────────────────────────────────────── */
 
-/* App title */
-h1 {
-    font-size: 36px;
-    text-align: center;
-    color: #FF4B4B;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ── Base reset ── */
+html, body, [class*="css"] {
+    font-family: 'Inter', sans-serif !important;
 }
 
-/* Text area */
+/* ── App background ── */
+.stApp {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    min-height: 100vh;
+}
+
+/* ── Hero header ── */
+.hero-header {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+    background: linear-gradient(135deg, rgba(255,75,75,0.08) 0%, rgba(99,102,241,0.08) 100%);
+    border: 1px solid rgba(255,75,75,0.2);
+    border-radius: 20px;
+    margin-bottom: 2rem;
+    backdrop-filter: blur(10px);
+}
+
+.hero-icon {
+    font-size: 3.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.hero-header h1 {
+    font-size: 2.6rem !important;
+    font-weight: 800 !important;
+    background: linear-gradient(135deg, #FF4B4B, #f97316, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.hero-subtitle {
+    color: #94a3b8;
+    font-size: 1.05rem;
+    margin-top: 0.75rem;
+    font-weight: 400;
+}
+
+/* ── Section cards ── */
+.section-card {
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(12px);
+}
+
+/* ── CTA row ── */
+.cta-row {
+    margin: 1.5rem 0;
+}
+
+/* ── Metric cards ── */
+.metric-card {
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(255,75,75,0.25);
+    border-radius: 14px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    backdrop-filter: blur(10px);
+}
+
+.metric-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(255,75,75,0.15);
+}
+
+.metric-value {
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #FF4B4B, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+}
+
+.metric-label {
+    font-size: 0.82rem;
+    color: #94a3b8;
+    margin-top: 0.4rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ── Candidate deep-dive card ── */
+.candidate-card {
+    padding: 0.5rem 0;
+}
+
+.candidate-card h4 {
+    font-size: 0.9rem;
+    color: #cbd5e1;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* ── Score pills row ── */
+.score-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1.2rem;
+}
+
+.score-pill {
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    font-size: 0.84rem;
+    font-weight: 500;
+}
+
+/* ── Skill tags ── */
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.3rem;
+}
+
+.tag {
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.tag-match {
+    background: rgba(34, 197, 94, 0.1);
+    color: #86efac;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.tag-miss {
+    background: rgba(239, 68, 68, 0.1);
+    color: #fca5a5;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* ── Streamlit component overrides ── */
+
+/* Text areas */
 [data-testid="stTextArea"] textarea {
     border-radius: 10px;
-    border: 2px solid #FF4B4B;
+    border: 1.5px solid rgba(255,75,75,0.35) !important;
+    background: rgba(15, 23, 42, 0.6) !important;
+    color: #e2e8f0 !important;
+    font-family: 'Inter', sans-serif !important;
+    transition: border-color 0.2s;
+}
+
+[data-testid="stTextArea"] textarea:focus {
+    border-color: #FF4B4B !important;
+    box-shadow: 0 0 0 3px rgba(255,75,75,0.1) !important;
 }
 
 /* File uploader */
 [data-testid="stFileUploader"] {
-    border-radius: 10px;
-    border: 2px solid #FF4B4B;
-    padding: 8px;
+    border-radius: 12px;
+    border: 1.5px dashed rgba(255,75,75,0.4) !important;
+    padding: 10px;
+    background: rgba(15, 23, 42, 0.4);
+    transition: border-color 0.2s;
+}
+
+[data-testid="stFileUploader"]:hover {
+    border-color: #FF4B4B !important;
 }
 
 /* Primary button */
-[data-testid="stButton"] button {
-    background-color: #FF4B4B;
-    color: white;
-    font-weight: bold;
-    border-radius: 10px;
-    padding: 10px 24px;
-    transition: background-color 0.2s ease;
+[data-testid="stButton"] > button[kind="primary"] {
+    background: linear-gradient(135deg, #FF4B4B 0%, #e03e3e 100%) !important;
+    color: white !important;
+    font-weight: 700 !important;
+    border-radius: 12px !important;
+    padding: 0.75rem 1.5rem !important;
+    border: none !important;
+    font-size: 1rem !important;
+    letter-spacing: 0.02em;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 4px 15px rgba(255,75,75,0.3) !important;
 }
 
-[data-testid="stButton"] button:hover {
-    background-color: #E03E3E;
-    color: white;
+[data-testid="stButton"] > button[kind="primary"]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(255,75,75,0.45) !important;
 }
 
-/* Dataframe container */
+/* Download button */
+[data-testid="stDownloadButton"] button {
+    background: rgba(99,102,241,0.15) !important;
+    color: #a5b4fc !important;
+    border: 1px solid rgba(99,102,241,0.4) !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+}
+
+[data-testid="stDownloadButton"] button:hover {
+    background: rgba(99,102,241,0.25) !important;
+    border-color: #6366f1 !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Dataframe */
 [data-testid="stDataFrame"] {
-    border-radius: 10px;
-    border: 2px solid #FF4B4B;
+    border-radius: 12px;
+    border: 1px solid rgba(255,75,75,0.2) !important;
+    overflow: hidden;
 }
 
-/* Expander (text preview) */
+/* Expanders (candidate cards) */
 [data-testid="stExpander"] {
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    margin-bottom: 8px;
+    border-radius: 14px !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+    background: rgba(30, 41, 59, 0.6) !important;
+    margin-bottom: 0.75rem;
+    backdrop-filter: blur(8px);
+    transition: border-color 0.2s ease;
+}
+
+[data-testid="stExpander"]:hover {
+    border-color: rgba(255,75,75,0.3) !important;
+}
+
+/* Progress bar */
+[data-testid="stProgress"] > div > div {
+    background: linear-gradient(90deg, #FF4B4B, #f97316) !important;
+    border-radius: 999px !important;
+}
+
+/* Radio buttons */
+[data-testid="stRadio"] label {
+    color: #cbd5e1 !important;
+}
+
+/* Info / warning / error boxes */
+[data-testid="stAlert"] {
+    border-radius: 10px !important;
+}
+
+/* Headings */
+h2, h3, h4 {
+    color: #e2e8f0 !important;
+}
+
+h3 {
+    font-weight: 700 !important;
+}
+
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background: rgba(15, 23, 42, 0.95) !important;
 }
